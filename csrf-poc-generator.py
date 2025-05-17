@@ -12,7 +12,7 @@ class BurpExtender(IBurpExtender, IContextMenuFactory):
         self._helpers = callbacks.getHelpers()
         callbacks.setExtensionName("CSRF PoC Generator")
         callbacks.registerContextMenuFactory(self)
-
+# code 
     def createMenuItems(self, invocation):
         menu = ArrayList()
         menu_item = JMenuItem("Generate CSRF PoC", actionPerformed=lambda x: self.generate_poc(invocation))
