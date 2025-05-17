@@ -1,85 +1,87 @@
-# CSRF PoC Generator - Burp Suite Extension
+# 🛡️ CSRF PoC Generator - Burp Suite Extension
 
-A Burp Suite extension that generates CSRF (Cross-Site Request Forgery) Proof-of-Concept (PoC) HTML forms from selected HTTP requests.  
-It allows security testers to quickly create CSRF attack payloads with options to auto-submit, save to file, and preview in a browser.
-
----
-
-## Features
-
-- Generates CSRF PoC HTML forms from HTTP **GET** and **POST** requests.
-- Automatically extracts parameters from URL query string (GET) or request body (POST).
-- Supports auto-submitting the CSRF form on page load or manual submission.
-- Popup window interface for viewing, saving, and previewing the generated PoC.
-- Save generated PoC to an HTML file.
-- Preview the CSRF PoC in the default system browser directly from Burp.
-- Easy integration as a context menu item inside Burp Suite.
+A powerful and user-friendly Burp Suite extension that automatically generates **Cross-Site Request Forgery (CSRF) Proof-of-Concept (PoC)** payloads in multiple formats (HTML form, JavaScript Fetch API, and cURL). Ideal for penetration testers and bug bounty hunters.
 
 ---
 
-## Requirements
+## 📦 Features
 
-- Burp Suite Professional or Community Edition (latest recommended).
-- Jython standalone JAR (version 2.7.x) for Python extension support.
-
----
-
-## Installation
-
-1. Download the Jython standalone JAR from [https://www.jython.org/downloads.html](https://www.jython.org/downloads.html).  
-   Example: `jython-standalone-2.7.2.jar`
-
-2. Save the extension script `csrf_poc_generator.py` to your local machine.
-
-3. Open Burp Suite.
-
-4. Navigate to the **Extender** tab.
-
-5. Click on the **Extensions** sub-tab.
-
-6. Click **Add**.
-
-7. In the "Add Extension" window:  
-   - Select **Extension type:** `Python`.  
-   - For **Extension file:** browse and select the `csrf_poc_generator.py` file.  
-   - For **Python Environment:** browse and select the downloaded `jython-standalone-2.7.x.jar`.
-
-8. Click **Next** or **Load** to load the extension.
-
-9. You should now see **CSRF PoC Generator** in the list of loaded extensions.
+✅ Generate CSRF PoCs directly from Burp Suite requests.
+✅Automatically extracts parameters from URL query string (GET) or request body (POST).  
+✅ Support for multiple formats:
+  - HTML Form
+  - JavaScript Fetch API
+  - cURL Command  
+✅ UI features:
+  - Format selector
+  - Syntax highlighting (optional)
+  - Copy to Clipboard
+  - Auto-submit toggle
+  - Preview in browser
+  - Save as HTML  
+✅ Handles both **GET** and **POST** methods  
+✅ Extracts all form parameters automatically
 
 ---
 
-## Usage
+## 📥 Installation Guide
 
-1. In Burp Suite, go to any tool where HTTP requests are displayed (e.g., **Proxy** > HTTP history, **Repeater**, or **Intruder**).
+### ✅ Requirements
 
-2. Right-click on a request you want to generate a CSRF PoC for.
+- Burp Suite (Community or Professional)
+- Jython standalone JAR (e.g., [Download Jython 2.7.2](https://www.jython.org/download))
+- `csrf-poc-generator.py` (this extension file)
 
-3. In the context menu, click **Generate CSRF PoC**.
+### 🧠 Optional (for syntax highlighting)
 
-4. A popup window will appear showing the generated CSRF PoC HTML form.
-
-5. Popup controls:  
-   - **Auto-submit form** (checkbox): Enable or disable automatic form submission on page load.  
-   - **Save to HTML**: Save the current PoC HTML to a file for later use or sharing.  
-   - **Preview in Browser**: Opens the generated PoC in your default browser to test the attack.  
-   - **Close**: Close the popup window.
+- Download `rsyntaxtextarea.jar` from [RSyntaxTextArea Releases](https://github.com/bobbylight/RSyntaxTextArea/releases)
+- This enables code highlighting in the UI.
 
 ---
 
-## How It Works
+### 🛠️ Step-by-Step Installation in Burp Suite
 
-- For **POST** requests, the extension parses form parameters from the request body and creates hidden input fields with their values.
-- For **GET** requests, it parses query string parameters and creates corresponding hidden inputs.
-- It builds an HTML form targeting the original request URL with the correct HTTP method (GET or POST).
-- If auto-submit is enabled, the form will submit immediately when loaded in a browser.
+1. **Launch Burp Suite**
+
+2. Go to **Extender > Options > Python Environment**  
+   Click `Select file...` and choose the **Jython standalone JAR** you downloaded.
+
+3. Go to **Extender > Extensions**  
+   Click `Add`  
+   - Extension Type: **Python**
+   - Extension File: Browse and select `csrf-poc-generator.py`
+
+4. (Optional) Under **Options > Include Library JARs**, add:
+   - `rsyntaxtextarea.jar` if syntax highlighting is desired.
+
+5. Once loaded, you should see **"CSRF PoC Generator"** listed under the Extensions tab.
 
 ---
 
-## Example
+## ⚙️ How to Use (Step-by-Step)
 
-Suppose you have a POST request with the following parameters:
+1. **Capture or send a request** using **Proxy** >HTTP history, **Repeater** or **Intruder**.
+
+2. **Right-click** on the request.
+
+3. Select **Extensions**>**"Generate CSRF PoC"** from the context menu.
+
+4. A new window will pop up with:
+   - The generated CSRF PoC in the selected format
+   - Dropdown to choose format: HTML, JS Fetch API, or cURL
+   - Checkbox to enable/disable Auto-submit (HTML only)
+   - Buttons to:
+     - Copy PoC to Clipboard
+     - Preview in Browser
+     - Save as HTML
+     - Close Window
+
+---
+
+## 📋 Example
+---
+
+Suppose you hava a POST requests with the following paramaters:-
 
 ```html
 POST /progile HTTP/1.1
@@ -88,13 +90,11 @@ Host: targetsite.com
 username=alice&action=update&token=abc123
 ```
 
-### The extension will generate a PoC HTML form like:
+### 🔹 HTML Form Output
 
 ```html
-<form id="csrfForm" action="https://targetsite.com/profile" method="POST">
-    <input type="hidden" name="username" value="alice" />
-    <input type="hidden" name="action" value="update" />
-    <input type="hidden" name="token" value="abc123" />
+<form id="csrfForm" action="http://example.com/delete" method="POST">
+    <input type="hidden" name="id" value="42" />
     <input type="submit" value="Submit request" />
 </form>
 <script>
@@ -102,3 +102,38 @@ username=alice&action=update&token=abc123
 </script>
 ```
 
+### 🔹 JavaScript Fetch API Output
+
+```javascript
+fetch("http://example.com/delete", {
+    method: "POST",
+    headers: {
+        "Content-Type": "application/x-www-form-urlencoded"
+    },
+    body: "id=42"
+});
+```
+
+### 🔹 cURL Command Output
+
+```bash
+curl -X POST -d "id=42" "http://example.com/delete"
+```
+
+
+## 🤝 Support & Contributions
+
+We welcome contributions and improvements! Here's how you can help:
+
+- ⭐ **Star** this repository to show your support
+- 🐛 **Report bugs** or request features via [GitHub Issues](https://github.com/Shiv-cybr03/CSRF-PoC-Generator/issues)
+- 🍴 **Fork the repository** and submit a Pull Request with your enhancements
+- 💬 Provide feedback or suggestions in the Issues tab
+
+Please follow the [Code of Conduct](CODE_OF_CONDUCT.md) and contribute respectfully.
+
+---
+
+## 📄 License
+
+This project is licensed under the [MIT License](LICENSE).
