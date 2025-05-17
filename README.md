@@ -81,8 +81,12 @@ It allows security testers to quickly create CSRF attack payloads with options t
 
 Suppose you have a POST request with the following parameters:
 
-username=alice&action=update&token=abc123
+```html
+POST /progile HTTP/1.1
+Host: targetsite.com
 
+username=alice&action=update&token=abc123
+```
 
 ### The extension will generate a PoC HTML form like:
 
@@ -96,5 +100,5 @@ username=alice&action=update&token=abc123
 <script>
     document.getElementById('csrfForm').submit();
 </script>
-
+```
 
